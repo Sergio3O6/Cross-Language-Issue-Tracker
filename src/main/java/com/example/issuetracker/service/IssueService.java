@@ -45,4 +45,27 @@ public class IssueService {
                 request.assignee());
         return repository.save(issue);
     }
+
+    /**
+     * Update an existing issue in place.
+     *
+     * <p>Note {@code createdDate} is intentionally left untouched — it is server-owned and
+     * marked {@code updatable = false} on the entity.
+     */
+    public Issue update(Long id, IssueRequest request) {
+        Issue issue = repository.findById(id).orElseThrow();
+        issue.setTitle(request.title());
+        issue.setDescription(request.description());
+        issue.setStatus(request.status());
+        issue.setPriority(request.priority());
+        issue.setAssignee(request.assignee());
+        return repository.save(issue);
+    }
+
+    /**
+     * Delete an issue by id.
+     */
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 }
