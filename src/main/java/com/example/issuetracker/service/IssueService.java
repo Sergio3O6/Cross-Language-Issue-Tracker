@@ -1,5 +1,6 @@
 package com.example.issuetracker.service;
 
+import com.example.issuetracker.dto.IssueRequest;
 import com.example.issuetracker.model.Issue;
 import com.example.issuetracker.repository.IssueRepository;
 import org.springframework.stereotype.Service;
@@ -30,5 +31,18 @@ public class IssueService {
      */
     public List<Issue> findAll() {
         return repository.findAll();
+    }
+
+    /**
+     * Create a new issue from a request DTO.
+     */
+    public Issue create(IssueRequest request) {
+        Issue issue = new Issue(
+                request.title(),
+                request.description(),
+                request.status(),
+                request.priority(),
+                request.assignee());
+        return repository.save(issue);
     }
 }

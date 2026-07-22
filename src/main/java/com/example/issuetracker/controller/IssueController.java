@@ -1,11 +1,18 @@
 package com.example.issuetracker.controller;
 
+import com.example.issuetracker.dto.IssueRequest;
 import com.example.issuetracker.model.Issue;
 import com.example.issuetracker.service.IssueService;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -34,5 +41,19 @@ public class IssueController {
     @GetMapping
     public List<Issue> getIssues() {
         return service.findAll();
+    }
+
+    /**
+     * POST /api/issues -> create. Returns 201 Created with a Location header.
+     * {@code @Valid} triggers the DTO constraints on the request body.
+     */
+    @PostMapping
+    public ResponseEntity<Issue> createIssue(@Valid @RequestBody IssueRequest request,
+                                             UriComponentsBuilder uriBuilder) {
+        Issue created = service.create(request);
+        URI location = uriBuilder.path("/api/issues/{id}")
+                .buildAndExpand(created.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(created);
     }
 }
