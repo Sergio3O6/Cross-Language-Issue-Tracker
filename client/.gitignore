@@ -1,0 +1,10 @@
+# .NET build output
+bin/
+obj/
+
+# Runtime logs produced by the client
+**/logs/
+
+# IDEs
+.vs/
+*.user
