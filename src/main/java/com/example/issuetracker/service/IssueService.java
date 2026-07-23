@@ -1,6 +1,7 @@
 package com.example.issuetracker.service;
 
 import com.example.issuetracker.dto.IssueRequest;
+import com.example.issuetracker.exception.ResourceNotFoundException;
 import com.example.issuetracker.model.Issue;
 import com.example.issuetracker.repository.IssueRepository;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,14 @@ public class IssueService {
     }
 
     /**
+     * Fetch a single issue or fail with a 404-mapped exception.
+     */
+    public Issue findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> ResourceNotFoundException.issue(id));
+    }
+
+    /**
      * Create a new issue from a request DTO.
      */
     public Issue create(IssueRequest request) {
@@ -53,7 +62,7 @@ public class IssueService {
      * marked {@code updatable = false} on the entity.
      */
     public Issue update(Long id, IssueRequest request) {
-        Issue issue = repository.findById(id).orElseThrow();
+        Issue issue = findById(id); // reuses the 404 behaviour
         issue.setTitle(request.title());
         issue.setDescription(request.description());
         issue.setStatus(request.status());
@@ -63,9 +72,12 @@ public class IssueService {
     }
 
     /**
-     * Delete an issue by id.
+     * Delete an issue, or 404 if it never existed.
      */
     public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw ResourceNotFoundException.issue(id);
+        }
         repository.deleteById(id);
     }
 }

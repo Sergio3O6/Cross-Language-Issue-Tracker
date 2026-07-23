@@ -47,6 +47,14 @@ public class IssueController {
     }
 
     /**
+     * GET /api/issues/{id} -> one issue, or 404 if it doesn't exist.
+     */
+    @GetMapping("/{id}")
+    public Issue getIssue(@PathVariable Long id) {
+        return service.findById(id);
+    }
+
+    /**
      * POST /api/issues -> create. Returns 201 Created with a Location header.
      * {@code @Valid} triggers the DTO constraints on the request body.
      */
