@@ -9,18 +9,10 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Centralised error handling for every controller.
- *
- * <p>{@code @RestControllerAdvice} applies these handlers across all controllers, so the
- * error-to-HTTP mapping lives in exactly one place and responses have a consistent shape.
- */
+/** Maps exceptions to consistent HTTP error responses across all controllers. */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /**
-     * Unknown id -> 404 Not Found.
-     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex) {
         Map<String, Object> body = new LinkedHashMap<>();

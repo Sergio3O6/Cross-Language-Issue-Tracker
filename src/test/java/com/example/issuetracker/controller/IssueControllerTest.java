@@ -24,13 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Web-layer tests using {@code @WebMvcTest} + Mockito.
- *
- * <p>Only the controller (and the exception handler) are loaded; the {@link IssueService}
- * is a Mockito mock, so no database is involved. This isolates HTTP behaviour: routing,
- * status codes and JSON shape.
- */
+/** Web-layer tests: controller with a mocked service, no database. */
 @WebMvcTest(IssueController.class)
 class IssueControllerTest {
 
@@ -40,7 +34,6 @@ class IssueControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // Replaces the real service bean with a mock we can stub.
     @MockBean
     private IssueService service;
 
