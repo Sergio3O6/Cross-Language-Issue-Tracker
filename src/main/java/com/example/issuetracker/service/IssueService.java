@@ -3,6 +3,7 @@ package com.example.issuetracker.service;
 import com.example.issuetracker.dto.IssueRequest;
 import com.example.issuetracker.exception.ResourceNotFoundException;
 import com.example.issuetracker.model.Issue;
+import com.example.issuetracker.model.Status;
 import com.example.issuetracker.repository.IssueRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +29,15 @@ public class IssueService {
     }
 
     /**
-     * List all issues.
+     * List all issues, optionally filtered by status.
+     *
+     * @param status if non-null, only issues in that status are returned;
+     *               if null, every issue is returned.
      */
-    public List<Issue> findAll() {
+    public List<Issue> findAll(Status status) {
+        if (status != null) {
+            return repository.findByStatus(status);
+        }
         return repository.findAll();
     }
 

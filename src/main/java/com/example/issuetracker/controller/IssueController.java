@@ -2,6 +2,7 @@ package com.example.issuetracker.controller;
 
 import com.example.issuetracker.dto.IssueRequest;
 import com.example.issuetracker.model.Issue;
+import com.example.issuetracker.model.Status;
 import com.example.issuetracker.service.IssueService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -39,11 +41,14 @@ public class IssueController {
     }
 
     /**
-     * GET /api/issues -> all issues.
+     * GET /api/issues            -> all issues.
+     * GET /api/issues?status=OPEN -> issues filtered by status.
+     *
+     * @param status optional query parameter; when omitted, all issues are returned.
      */
     @GetMapping
-    public List<Issue> getIssues() {
-        return service.findAll();
+    public List<Issue> getIssues(@RequestParam(required = false) Status status) {
+        return service.findAll(status);
     }
 
     /**
